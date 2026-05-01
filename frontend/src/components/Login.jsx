@@ -21,6 +21,7 @@ const Login = ({ onLogin, API_URL = "http://localhost:4000" }) => {
     });
     return res.data;
   };
+  
   const persistAuth = (profile, token) => {
     const storage = rememberMe ? localStorage : sessionStorage;
     try {
@@ -194,9 +195,7 @@ const Login = ({ onLogin, API_URL = "http://localhost:4000" }) => {
                 Create One 
                 </Link>
             </p>
-
           </div>
-
         </div>
       </div>
     </div>
