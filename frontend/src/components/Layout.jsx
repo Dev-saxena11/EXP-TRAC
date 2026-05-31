@@ -49,6 +49,8 @@ const safeArrayFromResponse = (res) => {
   if (Array.isArray(body.data)) return body.data;
   if (Array.isArray(body.incomes)) return body.incomes;
   if (Array.isArray(body.expenses)) return body.expenses;
+  if (Array.isArray(body.income)) return body.income;
+  if (Array.isArray(body.expense)) return body.expense;
   return [];
 };
 
@@ -199,8 +201,11 @@ const Layout = ({ onLogout, user }) => {
 
     const savingsRate =
       last30DaysIncome > 0
-        ? Math.round(
-          ((last30DaysIncome - last30DaysExpenses) / last30DaysIncome) * 100
+        ? Math.max(
+          0,
+          Math.round(
+            ((last30DaysIncome - last30DaysExpenses) / last30DaysIncome) * 100
+          )
         )
         : 0;
 
@@ -260,8 +265,10 @@ const Layout = ({ onLogout, user }) => {
     lastUpdated,
   };
 
-  const getSavingsRating = (rate) =>
-    rate > 30 ? "Excellent" : rate > 20 ? "Good" : "Needs improvement";
+  const getSavingsRating = (rate, savings) => {
+    if (savings < 0) return "Budget Exceeded";
+    return rate > 30 ? "Excellent" : rate > 20 ? "Good" : "Needs improvement";
+  };
 
   //for filter using category
   const topCategories = useMemo(
@@ -388,7 +395,7 @@ const Layout = ({ onLogout, user }) => {
               </div>
             </div>
             <p className={styles.statCards.cardFooter}>
-              {getSavingsRating(stats.savingsRate)}
+              {getSavingsRating(stats.savingsRate, stats.last30DaysSavings)}
             </p>
           </div>
         </div>
@@ -500,7 +507,7 @@ const Layout = ({ onLogout, user }) => {
                         )}
                       </div>
                       <span className={styles.categories.categoryName}>
-                        ${category}
+                        {category}
                       </span>
                     </div>
                     <span className={styles.categories.categoryAmount}

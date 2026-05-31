@@ -30,6 +30,7 @@ import FinancialCard from "../components/FinancialCard";
 import { getTimeFrameRange, generateChartPoints } from "../components/Helpers";
 import { INCOME_COLORS, CATEGORY_ICONS_Inc } from "../assets/color";
 import { incomeStyles as styles } from "../assets/dummyStyles";
+import QuickLogBar from "../components/QuickLogBar";
 import { API_URL } from "../config.js";
 
 const API_BASE = `${API_URL}/api`;
@@ -507,6 +508,8 @@ const Income = () => {
             {loading ? "Processing..." : "Add Income"}
           </button>
         </div>
+
+        <QuickLogBar onTransactionAdded={refreshTransactions} />
 
         <div className={styles.timeFrameContainer}>
           <TimeFrameSelector

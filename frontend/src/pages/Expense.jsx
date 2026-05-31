@@ -29,6 +29,7 @@ import AddTransactionModal from "../components/Add";
 import { getTimeFrameRange, generateChartPoints } from "../components/Helpers";
 import { CATEGORY_ICONS } from "../assets/color";
 import { expensePageStyles as styles } from "../assets/dummyStyles";
+import QuickLogBar from "../components/QuickLogBar";
 import { API_URL } from "../config.js";
 const API_BASE = `${API_URL}/api`;
 
@@ -379,6 +380,8 @@ const ExpensePage = () => {
             <Plus size={20} /> {loading ? "Processing..." : "Add Expense"}
           </button>
         </div>
+
+        <QuickLogBar onTransactionAdded={refreshTransactions} />
 
         <div className={styles.timeframePositioning}>
           <TimeFrameSelector

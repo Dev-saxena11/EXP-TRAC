@@ -9,6 +9,7 @@ import FinancialCard from '../components/FinancialCard.jsx';
 import { BarChart, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import GaugeCard from '../components/GaugeCard.jsx';
 import AddTransactionModal from '../components/Add.jsx';
+import QuickLogBar from '../components/QuickLogBar.jsx';
 import { API_URL } from '../config.js';
 const API_BASE=`${API_URL}/api`;
 const getAuthHeader=()=>{
@@ -354,6 +355,12 @@ const Dashboard = () => {
             ))}
           </div>
         </div>
+
+        <QuickLogBar onTransactionAdded={async () => {
+          await refreshTransactions();
+          await fetchDashboardOverview();
+        }} />
+
         <div className={dashboardStyles.summaryGrid}>
           <FinancialCard icon={
             <div className={dashboardStyles.walletIconContainer}>
@@ -406,15 +413,19 @@ const Dashboard = () => {
                 <div className='flex items-center gap-1'>
                   <BarChart2 className='w-4 h-4' />
                   <span>
-                    {displayIncome>0?Math.round((displaySavings/displayIncome)*100):0
-                    }
-                    % of income
+                    {displaySavings >= 0 ? (
+                      `${displayIncome > 0 ? Math.round((displaySavings / displayIncome) * 100) : 0}% of income saved`
+                    ) : (
+                      <span className="text-rose-500 font-medium">
+                        Overspent by {displayIncome > 0 ? Math.round((Math.abs(displaySavings) / displayIncome) * 100) : 0}% of income
+                      </span>
+                    )}
                   </span>
                 </div>
 
-                {typeof overviewMeta.savingsRate==="number" && (
-                  <span className={`px-2 py-1 rounded-full etxt-xs font-medium ${
-                    overviewMeta.savingsRate<0?trendStyles.negativeRate : trendStyles.positiveRate
+                {timeFrame === "monthly" && typeof overviewMeta.savingsRate === "number" && (
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    overviewMeta.savings < 0 ? trendStyles.negativeRate : trendStyles.positiveRate
                   }`}>
                     {overviewMeta.savingsRate}%
                   </span>

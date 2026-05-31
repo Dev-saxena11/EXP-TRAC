@@ -46,11 +46,11 @@ export async function getAllExpense(req, res) {
 export async function updateExpense(req, res) {
   const { id } = req.params;
   const userId = req.user._id;
-  const { description, amount } = req.body;
+  const { description, amount, category, date } = req.body;
   try {
     const updatedExpense = await expenseModel.findOneAndUpdate(
       { _id: id, userId },
-      { description, amount },
+      { description, amount, category, date: date ? new Date(date) : undefined },
       { new: true },
     );
     if (!updatedExpense) {
@@ -73,9 +73,11 @@ export async function updateExpense(req, res) {
 
 //to delete expense
 export async function deleteExpense(req, res) {
+  const userId = req.user._id;
   try {
-    const expense = await expenseModel.findByIdAndDelete({
+    const expense = await expenseModel.findOneAndDelete({
       _id: req.params.id,
+      userId,
     });
     if (!expense) {
       return res
@@ -104,8 +106,11 @@ export async function downloadExpenseExcel(req, res) {
     const worksheet = XLSX.utils.json_to_sheet(plainData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "expenseModel");
-    XLSX.writeFile(workbook, "expense_details.xlsx");
-    res.download("expense_details.xlsx");
+    const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+    res.setHeader("Content-Disposition", 'attachment; filename="expense_details.xlsx"');
+    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.send(buffer);
+
   } catch (error) {
     console.error("Error downloading expense data:", error);
     return res.status(500).json({ success: false, message: "Server error" });

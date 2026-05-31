@@ -30,7 +30,9 @@ export async function getDashboardOverview(req, res) {
     );
     const savings = monthlyIncome - monthlyExpense;
     const savingsRate =
-      monthlyIncome === 0 ? 0 : Math.round((savings / monthlyIncome) * 100);
+      monthlyIncome === 0
+        ? 0
+        : Math.max(0, Math.round((savings / monthlyIncome) * 100));
 
     const recentTransactions = [
       ...incomes.map((i) => ({ ...i, type: "income" })),
