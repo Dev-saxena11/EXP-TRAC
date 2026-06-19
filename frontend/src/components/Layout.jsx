@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { styles } from "../assets/dummyStyles.js";
 import Navbar from './Navbar.jsx';
 import Sidebar from './Sidebar.jsx';
+import { formatCurrency, getCurrencySymbol } from '../utils/currencyHelper.js';
 import { Activity, ArrowDown, ArrowUp, Car, ChevronDown, ChevronUp, Clock, CreditCard, DollarSign, Gift, Home, Info, PieChart, PiggyBank, RefreshCw, ShoppingCart, TrendingUp, Utensils, Zap } from 'lucide-react';
 import axios from 'axios';
 import { Outlet } from 'react-router-dom';
@@ -55,6 +56,7 @@ const safeArrayFromResponse = (res) => {
 };
 
 const Layout = ({ onLogout, user }) => {
+  const baseCurrency = user?.preferredCurrency || "INR";
   const [transactions, setTransactions] = useState([]);
   const [timeFrame, setTimeFrame] = useState("monthly");
   const [loading, setLoading] = useState(false);
@@ -91,6 +93,10 @@ const Layout = ({ onLogout, user }) => {
           date: t.date || t.createdAt || new Date().toISOString(),
           category: t.category || t.type || "Other",
           type: t.type,
+          originalAmount: t.originalAmount,
+          originalCurrency: t.originalCurrency,
+          conversionRate: t.conversionRate,
+          baseCurrency: t.baseCurrency,
           raw: t,
         }))
         .sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -263,6 +269,7 @@ const Layout = ({ onLogout, user }) => {
     timeFrame,
     setTimeFrame,
     lastUpdated,
+    baseCurrency,
   };
 
   const getSavingsRating = (rate, savings) => {
@@ -314,9 +321,7 @@ const Layout = ({ onLogout, user }) => {
                 <p className={styles.statCards.cardTitle}>Total Balance
                 </p>
                 <p className={styles.statCards.cardValue}>
-                  ${stats.allTimeSavings.toLocaleString('en-US', {
-                    minimumFractionDigits: 2
-                  })}
+                  {formatCurrency(stats.allTimeSavings, baseCurrency)}
                 </p>
               </div>
               <div className={styles.statCards.iconContainer('teal')}>
@@ -325,7 +330,7 @@ const Layout = ({ onLogout, user }) => {
             </div>
             <p className={styles.statCards.cardFooter}>
               <span className='text-teal-600 font-medium'>
-                +${stats.last30DaysSavings.toLocaleString()}
+                {stats.last30DaysSavings >= 0 ? "+" : ""}{formatCurrency(stats.last30DaysSavings, baseCurrency)}
               </span>{" "}
               this month
             </p>
@@ -337,9 +342,7 @@ const Layout = ({ onLogout, user }) => {
                 <p className={styles.statCards.cardTitle}>Monthly Income
                 </p>
                 <p className={styles.statCards.cardValue}>
-                  ${stats.last30DaysIncome.toLocaleString('en-US', {
-                    minimumFractionDigits: 2
-                  })}
+                  {formatCurrency(stats.last30DaysIncome, baseCurrency)}
                 </p>
               </div>
               <div className={styles.statCards.iconContainer('green')}>
@@ -360,9 +363,7 @@ const Layout = ({ onLogout, user }) => {
                 <p className={styles.statCards.cardTitle}>Monthly Expense
                 </p>
                 <p className={styles.statCards.cardValue}>
-                  ${stats.last30DaysExpenses.toLocaleString('en-US', {
-                    minimumFractionDigits: 2
-                  })}
+                  {formatCurrency(stats.last30DaysExpenses, baseCurrency)}
                 </p>
               </div>
               <div className={styles.statCards.iconContainer('orange')}>
@@ -457,7 +458,7 @@ const Layout = ({ onLogout, user }) => {
                         </div>
                       </div>
                       <span className={styles.colors.transaction.text(type)}>
-                        {type === "income" ? "+" : "-"}${Number(amount)}
+                        {type === "income" ? "+" : "-"}{formatCurrency(amount, baseCurrency)}
                       </span>
                     </div>
                   );
@@ -512,7 +513,7 @@ const Layout = ({ onLogout, user }) => {
                     </div>
                     <span className={styles.categories.categoryAmount}
                     >
-                      ${amount}
+                      {formatCurrency(amount, baseCurrency)}
                     </span>
                   </div>
                 ))}
@@ -526,7 +527,7 @@ const Layout = ({ onLogout, user }) => {
                       Total Income
                     </p>
                     <p className={styles.categories.summaryValue}>
-                      ${stats.allTimeIncome.toLocaleString()}
+                      {formatCurrency(stats.allTimeIncome, baseCurrency)}
                     </p>
                   </div>
 
@@ -535,7 +536,7 @@ const Layout = ({ onLogout, user }) => {
                       Total Expense
                     </p>
                     <p className={styles.categories.summaryValue}>
-                      ${stats.allTimeExpenses.toLocaleString()}
+                      {formatCurrency(stats.allTimeExpenses, baseCurrency)}
                     </p>
                   </div>
 

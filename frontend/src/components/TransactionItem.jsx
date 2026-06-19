@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { transactionItemStyles } from "../assets/dummyStyles.js";
 import { colorClasses } from "../assets/color.jsx";
 import { DollarSign, Edit, Save, Trash2, X } from "lucide-react";
+import { formatCurrency } from "../utils/currencyHelper.js";
 
 const TransactionItem = ({
   transaction,
@@ -113,7 +114,23 @@ const TransactionItem = ({
                   !!errors.amount,
                   classes,
                 )}
+                placeholder="Amount"
               />
+              <select
+                value={editForm.currency || "INR"}
+                onChange={(e) =>
+                  setEditForm((prev) => ({ ...prev, currency: e.target.value }))
+                }
+                className="mt-1 block w-full text-xs border border-gray-200 bg-white rounded-lg p-1 text-gray-700 focus:outline-none focus:ring-1 focus:ring-teal-500"
+              >
+                <option value="INR">INR (₹)</option>
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="JPY">JPY (¥)</option>
+                <option value="CAD">CAD (CA$)</option>
+                <option value="AUD">AUD (A$)</option>
+              </select>
               {errors.amount && (
                 <p
                   id={`amt-error-${transaction.id}`}
@@ -124,15 +141,18 @@ const TransactionItem = ({
               )}
             </>
           ) : (
-            <span
-              className={transactionItemStyles.amountText(amountClass, classes)}
-            >
-              {sign}$
-              {Number(transaction.amount).toLocaleString("en-US", {
-                maximumFractionDigits: 2,
-                minimumFractionDigits: 2,
-              })}
-            </span>
+            <div className="flex flex-col items-end">
+              <span
+                className={transactionItemStyles.amountText(amountClass, classes)}
+              >
+                {sign}{formatCurrency(transaction.amount, transaction.baseCurrency || "INR")}
+              </span>
+              {transaction.originalCurrency && transaction.baseCurrency && transaction.originalCurrency.toUpperCase() !== transaction.baseCurrency.toUpperCase() && (
+                <span className="text-[10px] text-gray-500 font-medium whitespace-nowrap">
+                  ({formatCurrency(transaction.originalAmount != null ? transaction.originalAmount : transaction.amount, transaction.originalCurrency)})
+                </span>
+              )}
+            </div>
           )}
         </div>
 
@@ -164,7 +184,8 @@ const TransactionItem = ({
                 onClick={() => {
                   setEditForm({
                     description: transaction.description ?? "",
-                    amount: transaction.amount ?? "",
+                    amount: transaction.originalAmount != null ? transaction.originalAmount : (transaction.amount ?? ""),
+                    currency: transaction.originalCurrency || transaction.baseCurrency || "INR",
                     category: transaction.category ?? "",
                     date: transaction.date ?? "",
                     type: transaction.type ?? "expense",

@@ -31,6 +31,7 @@ import { getTimeFrameRange, generateChartPoints } from "../components/Helpers";
 import { INCOME_COLORS, CATEGORY_ICONS_Inc } from "../assets/color";
 import { incomeStyles as styles } from "../assets/dummyStyles";
 import QuickLogBar from "../components/QuickLogBar";
+import { formatCurrency } from "../utils/currencyHelper.js";
 import { API_URL } from "../config.js";
 
 const API_BASE = `${API_URL}/api`;
@@ -55,7 +56,7 @@ function toIsoWithClientTime(dateValue) {
   }
 }
 
-const IncomeChart = ({ chartData, timeFrame, timeFrameRange }) => (
+const IncomeChart = ({ chartData, timeFrame, timeFrameRange, baseCurrency = "INR" }) => (
   <div className={styles.chartContainer}>
     <div className={styles.chartHeaderContainer}>
       <h3 className={styles.chartTitle}>
@@ -101,11 +102,11 @@ const IncomeChart = ({ chartData, timeFrame, timeFrameRange }) => (
             tickLine={false}
             tick={{ fill: "#6b7280", fontSize: 12 }}
             width={50}
-            tickFormatter={(value) => `$${value.toLocaleString()}`}
+            tickFormatter={(value) => formatCurrency(value, baseCurrency)}
           />
           <Tooltip
             formatter={(value) => [
-              `$${Math.round(value).toLocaleString()}`,
+              formatCurrency(value, baseCurrency),
               "Income",
             ]}
             contentStyle={styles.tooltipContent}
@@ -174,6 +175,7 @@ const Income = () => {
     timeFrame = "monthly",
     setTimeFrame = () => { },
     refreshTransactions,
+    baseCurrency = "INR"
   } = useOutletContext();
 
   const [showModal, setShowModal] = useState(false);
@@ -194,6 +196,7 @@ const Income = () => {
     amount: "",
     type: "income",
     category: "Salary",
+    currency: "",
   });
   const [editForm, setEditForm] = useState({
     description: "",
@@ -353,6 +356,7 @@ const Income = () => {
         amount: parseFloat(newTransaction.amount),
         category: newTransaction.category,
         date: toIsoWithClientTime(newTransaction.date),
+        currency: newTransaction.currency || baseCurrency,
       };
 
       await axios.post(`${API_BASE}/income/add`, payload, {
@@ -395,6 +399,7 @@ const Income = () => {
         amount: parseFloat(editForm.amount),
         category: editForm.category,
         date: toIsoWithClientTime(editForm.date),
+        currency: editForm.currency,
       };
 
       await axios.put(`${API_BASE}/income/update/${editingId}`, payload, {
@@ -531,7 +536,7 @@ const Income = () => {
             </div>
           }
           label="Total Income"
-          value={`$${Number(totalIncome || 0).toLocaleString()}`}
+          value={formatCurrency(totalIncome, baseCurrency)}
           additionalContent={
             <div className="mt-2 text-xs text-gray-500 flex items-center">
               <Calendar className="w-3 h-3 mr-1" /> {timeFrameRange.label}
@@ -548,7 +553,7 @@ const Income = () => {
             </div>
           }
           label="Average Income"
-          value={`$${Number(averageIncome || 0).toLocaleString()}`}
+          value={formatCurrency(averageIncome, baseCurrency)}
           additionalContent={
             <div className="mt-2 text-xs text-gray-500 flex items-center">
               <Calendar className="w-3 h-3 mr-1" /> {transactionsCount}{" "}
@@ -580,6 +585,7 @@ const Income = () => {
         chartData={chartData}
         timeFrame={timeFrame}
         timeFrameRange={timeFrameRange}
+        baseCurrency={baseCurrency}
       />
 
       <div className={styles.listContainer}>

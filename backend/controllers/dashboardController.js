@@ -67,6 +67,7 @@ export async function getDashboardOverview(req, res) {
         recentTransactions,
         spendByCategory,
         expenseDistribution,
+        preferredCurrency: req.user.preferredCurrency || "INR",
       },
     });
   } catch (error) {

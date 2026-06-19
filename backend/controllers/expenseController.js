@@ -1,22 +1,34 @@
 import expenseModel from "../models/expenseModel.js";
 import getDateRange from "../utils/dateFilter.js";
 import XLSX from "xlsx";
+import { getExchangeRate } from "../utils/currency.js";
 
 
 
 //add expense
 export async function addExpense(req, res) {
   const userId = req.user._id;
-  const { description, amount, category, date } = req.body;
+  const { description, amount, category, date, currency, originalCurrency } = req.body;
   try {
     if (!description || !amount || !category || !date) {
       return res
         .status(400)
         .json({ success: false, message: "All fields are required" });
     }
+    const finalCurrency = currency || originalCurrency || req.user.preferredCurrency || "INR";
+    const baseCurrency = req.user.preferredCurrency || "INR";
+    const originalAmount = parseFloat(amount);
+
+    const rate = await getExchangeRate(finalCurrency, baseCurrency);
+    const convertedAmount = originalAmount * rate;
+
     const newExpense = new expenseModel({
       description,
-      amount,
+      amount: convertedAmount,
+      originalAmount,
+      originalCurrency: finalCurrency,
+      conversionRate: rate,
+      baseCurrency,
       category,
       date: new Date(date),
       userId,
@@ -46,27 +58,47 @@ export async function getAllExpense(req, res) {
 export async function updateExpense(req, res) {
   const { id } = req.params;
   const userId = req.user._id;
-  const { description, amount, category, date } = req.body;
+  const { description, amount, category, date, currency, originalCurrency } = req.body;
   try {
-    const updatedExpense = await expenseModel.findOneAndUpdate(
-      { _id: id, userId },
-      { description, amount, category, date: date ? new Date(date) : undefined },
-      { new: true },
-    );
-    if (!updatedExpense) {
+    const expense = await expenseModel.findOne({ _id: id, userId });
+    if (!expense) {
       return res
         .status(404)
         .json({ success: false, message: "Expense not found" });
     }
+
+    if (description !== undefined) expense.description = description;
+    if (category !== undefined) expense.category = category;
+    if (date !== undefined) expense.date = new Date(date);
+
+    const inputCurrency = currency || originalCurrency;
+    const isAmountUpdated = amount !== undefined && parseFloat(amount) !== expense.originalAmount;
+    const isCurrencyUpdated = inputCurrency !== undefined && inputCurrency !== expense.originalCurrency;
+
+    if (isAmountUpdated || isCurrencyUpdated || expense.originalAmount === undefined) {
+      const finalAmount = amount !== undefined ? parseFloat(amount) : (expense.originalAmount != null ? expense.originalAmount : expense.amount);
+      const finalCurrency = inputCurrency !== undefined ? inputCurrency : (expense.originalCurrency || expense.baseCurrency || req.user.preferredCurrency || "INR");
+      const baseCurrency = expense.baseCurrency || req.user.preferredCurrency || "INR";
+
+      const rate = await getExchangeRate(finalCurrency, baseCurrency);
+      expense.originalAmount = finalAmount;
+      expense.originalCurrency = finalCurrency;
+      expense.conversionRate = rate;
+      expense.amount = finalAmount * rate;
+      expense.baseCurrency = baseCurrency;
+    }
+
+    await expense.save();
+
     res
       .status(200)
       .json({
         success: true,
         message: "Expense updated successfully",
-        data: updatedExpense,
+        data: expense,
       });
   } catch (error) {
-    console.error("Error updating income:", error);
+    console.error("Error updating expense:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 }
@@ -97,7 +129,11 @@ export async function downloadExpenseExcel(req, res) {
     const expense = await expenseModel.find({ userId }).sort({ date: -1 });
     const plainData = expense.map((exp) => ({
       Description: exp.description,
-      Amount: exp.amount,
+      "Base Currency Amount": exp.amount,
+      "Base Currency": exp.baseCurrency || "INR",
+      "Original Amount": exp.originalAmount != null ? exp.originalAmount : exp.amount,
+      "Original Currency": exp.originalCurrency || exp.baseCurrency || "INR",
+      "Exchange Rate": exp.conversionRate != null ? exp.conversionRate : 1.0,
       Category: exp.category,
       Date: new Date(exp.date).toLocaleDateString(),
     }));

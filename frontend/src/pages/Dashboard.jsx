@@ -10,6 +10,7 @@ import { BarChart, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } f
 import GaugeCard from '../components/GaugeCard.jsx';
 import AddTransactionModal from '../components/Add.jsx';
 import QuickLogBar from '../components/QuickLogBar.jsx';
+import { formatCurrency, getCurrencySymbol } from '../utils/currencyHelper.js';
 import { API_URL } from '../config.js';
 const API_BASE=`${API_URL}/api`;
 const getAuthHeader=()=>{
@@ -46,9 +47,10 @@ const Dashboard = () => {
   } = useOutletContext();
 
   const [showModal, setShowModal] = useState(false);
+  const [overviewMeta, setOverviewMeta] = useState({ preferredCurrency: "INR" });
+  const baseCurrency = overviewMeta.preferredCurrency || "INR";
   const [gaugeData, setGaugeData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [overviewMeta, setOverviewMeta] = useState({});
   const [showAllIncome, setShowAllIncome] = useState(false);
   const [showAllExpense, setShowAllExpense] = useState(false);
 
@@ -258,6 +260,7 @@ const Dashboard = () => {
           spendByCategory: data.spendByCategory || {},
           expenseDistribution: data.expenseDistribution || [],
           recentTransactions: recent,
+          preferredCurrency: data.preferredCurrency || "INR",
         }));
          if (timeFrame === "monthly") {
           const monthlyIncome = Number(data.monthlyIncome || 0);
@@ -366,14 +369,14 @@ const Dashboard = () => {
             <div className={dashboardStyles.walletIconContainer}>
               <Wallet className='w-5 h-5 text-teal-600' />
               </div>
-            } label="Total Balance" value={`$${Math.round(displayIncome-displayExpenses).toLocaleString()}`}
+            } label="Total Balance" value={formatCurrency(displayIncome-displayExpenses, baseCurrency)}
             additionalContent={
               <div className="flex items-center gap-2 mt-2 text-sm">
                 <span className={dashboardStyles.balanceBadge}>
-                  +${Math.round(displayIncome).toLocaleString()}
+                  +{formatCurrency(displayIncome, baseCurrency)}
                 </span>
                 <span className={dashboardStyles.expenseBadge}>
-                  -${Math.round(displayExpenses).toLocaleString()}
+                  -{formatCurrency(displayExpenses, baseCurrency)}
 
                 </span>
                 </div>
@@ -384,7 +387,7 @@ const Dashboard = () => {
             <div className={dashboardStyles.arrowDownIconContainer}>
               <ArrowDown className='w-5 h-5 text-orange-600' />
               </div>
-            } label={`${timeFrameRange.label} Expenses`} value={`$${Math.round(displayExpenses).toLocaleString()}`}
+            } label={`${timeFrameRange.label} Expenses`} value={formatCurrency(displayExpenses, baseCurrency)}
             additionalContent={
               <div className={`mt-2 text-xs flex items-center gap-1 ${
                 expenseChange >=0? trendStyles.positive : trendStyles.negative
@@ -407,7 +410,7 @@ const Dashboard = () => {
             <div className={dashboardStyles.piggyBankIconContainer}>
               <PiggyBank className='w-5 h-5 text-cyan-600' />
               </div>
-            } label={`${timeFrameRange.label} Savings`} value={`$${Math.round(displaySavings).toLocaleString()}`}
+            } label={`${timeFrameRange.label} Savings`} value={formatCurrency(displaySavings, baseCurrency)}
             additionalContent={
               <div className='mt-2 text-xs text-cyan-600 flex items-center gap-2'>
                 <div className='flex items-center gap-1'>
@@ -479,7 +482,7 @@ const Dashboard = () => {
                 ))}
               </Pie>
               <Tooltip
-                formatter={(value) => [`$${Math.round(value).toLocaleString()}`, "Amount"]}
+                formatter={(value) => [formatCurrency(value, baseCurrency), "Amount"]}
                 contentStyle={dashboardStyles.tooltipContent}
                 itemStyle={dashboardStyles.tooltipItem}
               />
@@ -527,7 +530,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div className={dashboardStyles.transactionAmount}>
-                    <p className={dashboardStyles.incomeAmount}>+${Math.abs(transaction.amount).toLocaleString()}</p>
+                    <p className={dashboardStyles.incomeAmount}>+{formatCurrency(transaction.amount, baseCurrency)}</p>
                     <p className={dashboardStyles.transactionDate}>{new Date(transaction.date).toLocaleDateString()}</p>
                   </div>
                 </div>
@@ -593,7 +596,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div className={dashboardStyles.transactionAmount}>
-                    <p className={dashboardStyles.expenseAmount}>-${Math.abs(transaction.amount).toLocaleString()}</p>
+                    <p className={dashboardStyles.expenseAmount}>-{formatCurrency(transaction.amount, baseCurrency)}</p>
                     <p className={dashboardStyles.transactionDate}>{new Date(transaction.date).toLocaleDateString()}</p>
                   </div>
                 </div>

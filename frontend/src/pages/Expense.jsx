@@ -30,6 +30,7 @@ import { getTimeFrameRange, generateChartPoints } from "../components/Helpers";
 import { CATEGORY_ICONS } from "../assets/color";
 import { expensePageStyles as styles } from "../assets/dummyStyles";
 import QuickLogBar from "../components/QuickLogBar";
+import { formatCurrency } from "../utils/currencyHelper.js";
 import { API_URL } from "../config.js";
 const API_BASE = `${API_URL}/api`;
 
@@ -66,7 +67,8 @@ const ExpensePage = () => {
     transactions: outletTransactions = [],
     timeFrame = "monthly",
     setTimeFrame = () => { },
-    refreshTransactions
+    refreshTransactions,
+    baseCurrency = "INR"
   } = useOutletContext();
 
   const [showModal, setShowModal] = useState(false);
@@ -87,6 +89,7 @@ const ExpensePage = () => {
     amount: "",
     type: "expense",
     category: "Food",
+    currency: "",
   });
   const [setOverview] = useState({
     totalExpense: 0,
@@ -268,6 +271,7 @@ const ExpensePage = () => {
         amount: parseFloat(newTransaction.amount),
         category: newTransaction.category,
         date: toIsoWithClientTime(newTransaction.date),
+        currency: newTransaction.currency || baseCurrency,
       };
 
       await handleApiRequest('post', '/expense/add', payload);
@@ -304,6 +308,7 @@ const ExpensePage = () => {
         amount: parseFloat(editForm.amount),
         category: editForm.category,
         date: toIsoWithClientTime(editForm.date),
+        currency: editForm.currency,
       };
 
       await handleApiRequest('put', `/expense/update/${editingId}`, payload);
@@ -404,7 +409,7 @@ const ExpensePage = () => {
             </div>
           }
           label="Total Expenses"
-          value={`$${totalExpense.toLocaleString()}`}
+          value={formatCurrency(totalExpense, baseCurrency)}
           additionalContent={
             <div className="mt-2 text-xs text-gray-500 flex items-center">
               <Calendar className="w-3 h-3 mr-1" /> {timeFrameRange.label}
@@ -420,7 +425,7 @@ const ExpensePage = () => {
             </div>
           }
           label="Average Expense"
-          value={`$${averageExpense.toLocaleString()}`}
+          value={formatCurrency(averageExpense, baseCurrency)}
           additionalContent={
             <div className="mt-2 text-xs text-gray-500 flex items-center">
               <Calendar className="w-3 h-3 mr-1" /> {filteredTransactions.length} transactions
@@ -478,10 +483,10 @@ const ExpensePage = () => {
                 tickLine={false}
                 tick={{ fill: "#6b7280", fontSize: 12 }}
                 width={60}
-                tickFormatter={(value) => `$${value.toLocaleString()}`}
+                tickFormatter={(value) => formatCurrency(value, baseCurrency)}
               />
               <Tooltip
-                formatter={(value) => [`$${Math.round(value).toLocaleString()}`, "Expense"]}
+                formatter={(value) => [formatCurrency(value, baseCurrency), "Expense"]}
                 contentStyle={styles.tooltipContent}
               />
               <Area

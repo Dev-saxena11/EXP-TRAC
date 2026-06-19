@@ -1,18 +1,30 @@
 import incomeModel from "../models/incomeModel.js";
 import XLSX from "xlsx";
 import getDateRange from "../utils/dateFilter.js";
+import { getExchangeRate } from "../utils/currency.js";
 
 //add income
 export async function addIncome(req, res) {
     const userId = req.user._id
-    const { description, amount, category, date } = req.body
+    const { description, amount, category, date, currency, originalCurrency } = req.body
     try {
         if (!description || !amount || !category || !date) {
             return res.status(400).json({ success: false, message: "All fields are required" });
         }
+        const finalCurrency = currency || originalCurrency || req.user.preferredCurrency || "INR";
+        const baseCurrency = req.user.preferredCurrency || "INR";
+        const originalAmount = parseFloat(amount);
+
+        const rate = await getExchangeRate(finalCurrency, baseCurrency);
+        const convertedAmount = originalAmount * rate;
+
         const newIncome = new incomeModel({
             description,
-            amount,
+            amount: convertedAmount,
+            originalAmount,
+            originalCurrency: finalCurrency,
+            conversionRate: rate,
+            baseCurrency,
             category,
             date: new Date(date),
             userId
@@ -40,17 +52,37 @@ export async function getAllIncome(req, res) {
 export async function updateIncome(req, res) {
     const { id } = req.params;
     const userId = req.user._id;
-    const { description, amount, category, date } = req.body;
+    const { description, amount, category, date, currency, originalCurrency } = req.body;
     try {
-        const updatedIncome = await incomeModel.findOneAndUpdate(
-            { _id: id, userId },
-            { description, amount, category, date: date ? new Date(date) : undefined },
-            { new: true }
-        );
-        if (!updatedIncome) {
+        const income = await incomeModel.findOne({ _id: id, userId });
+        if (!income) {
             return res.status(404).json({ success: false, message: "Income not found" });
         }
-        res.status(200).json({ success: true, message: "Income updated successfully", data: updatedIncome });
+
+        if (description !== undefined) income.description = description;
+        if (category !== undefined) income.category = category;
+        if (date !== undefined) income.date = new Date(date);
+
+        const inputCurrency = currency || originalCurrency;
+        const isAmountUpdated = amount !== undefined && parseFloat(amount) !== income.originalAmount;
+        const isCurrencyUpdated = inputCurrency !== undefined && inputCurrency !== income.originalCurrency;
+
+        if (isAmountUpdated || isCurrencyUpdated || income.originalAmount === undefined) {
+            const finalAmount = amount !== undefined ? parseFloat(amount) : (income.originalAmount != null ? income.originalAmount : income.amount);
+            const finalCurrency = inputCurrency !== undefined ? inputCurrency : (income.originalCurrency || income.baseCurrency || req.user.preferredCurrency || "INR");
+            const baseCurrency = income.baseCurrency || req.user.preferredCurrency || "INR";
+
+            const rate = await getExchangeRate(finalCurrency, baseCurrency);
+            income.originalAmount = finalAmount;
+            income.originalCurrency = finalCurrency;
+            income.conversionRate = rate;
+            income.amount = finalAmount * rate;
+            income.baseCurrency = baseCurrency;
+        }
+
+        await income.save();
+
+        res.status(200).json({ success: true, message: "Income updated successfully", data: income });
 
     } catch (error) {
         console.error("Error updating income:", error);
@@ -81,7 +113,11 @@ export async function downloadIncomeExcel(req, res) {
         const income = await incomeModel.find({ userId }).sort({ date: -1 });
         const plainData = income.map((inc) => ({
             Description: inc.description,
-            Amount: inc.amount,
+            "Base Currency Amount": inc.amount,
+            "Base Currency": inc.baseCurrency || "INR",
+            "Original Amount": inc.originalAmount != null ? inc.originalAmount : inc.amount,
+            "Original Currency": inc.originalCurrency || inc.baseCurrency || "INR",
+            "Exchange Rate": inc.conversionRate != null ? inc.conversionRate : 1.0,
             Category: inc.category,
             Date: new Date(inc.date).toLocaleDateString()
         }));

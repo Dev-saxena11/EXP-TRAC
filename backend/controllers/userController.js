@@ -1,4 +1,7 @@
 import User from '../models/userModel.js';
+import expenseModel from '../models/expenseModel.js';
+import incomeModel from '../models/incomeModel.js';
+import { getExchangeRate } from '../utils/currency.js';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -35,7 +38,7 @@ export async function registerUser(req,res){
             success:true,
             message:"User registered successfully",
             token,
-            user:{id:user._id,name:user.name,email:user.email}
+            user:{id:user._id,name:user.name,email:user.email,preferredCurrency:user.preferredCurrency || 'INR'}
         })
     }
     catch(err){
@@ -64,7 +67,7 @@ export async function loginUser(req,res){
         res.status(200).json({
             success:true,message:"User logged in successfully",
             token,
-            user:{id:user._id,name:user.name,email:user.email}
+            user:{id:user._id,name:user.name,email:user.email,preferredCurrency:user.preferredCurrency || 'INR'}
         })
     }
     catch(err){
@@ -76,7 +79,7 @@ export async function loginUser(req,res){
 //to get login user details
 export async function getCurrentuser(req,res){
     try{
-        const user=await User.findById(req.user.id).select('name email');
+        const user=await User.findById(req.user.id).select('name email preferredCurrency');
         if(!user){
             return res.status(404).json({success:false,message:"User not found"});
         }
@@ -91,7 +94,7 @@ export async function getCurrentuser(req,res){
 
 //update user profile
 export async function updateProfile(req,res){
-    const {name,email} = req.body;
+    const {name,email,preferredCurrency} = req.body;
     if(!name||!email||!validator.isEmail(email)){
         return res.status(400).json({success:false,message:"Please provide valid name and email"});
     }
@@ -100,10 +103,55 @@ export async function updateProfile(req,res){
         if(exists){
             return res.status(409).json({success:false,message:"Email already in use by another user"});
         }
-        const user = await User.findByIdAndUpdate(req.user.id,
-            {name,email},
-            {new:true , runValidators:true, select:"name email"});
-        res.json({success:true,message:"Profile updated successfully",user});
+        const currentUser = await User.findById(req.user.id);
+        if(!currentUser){
+            return res.status(404).json({success:false,message:"User not found"});
+        }
+        
+        const oldCurrency = currentUser.preferredCurrency || 'INR';
+        const newCurrency = preferredCurrency || oldCurrency;
+        const currencyChanged = oldCurrency !== newCurrency;
+
+        currentUser.name = name;
+        currentUser.email = email;
+        currentUser.preferredCurrency = newCurrency;
+        await currentUser.save();
+
+        if (currencyChanged) {
+            const incomes = await incomeModel.find({ userId: req.user.id });
+            const expenses = await expenseModel.find({ userId: req.user.id });
+
+            const updateTransactionCurrency = async (tx) => {
+                const origAmount = tx.originalAmount != null ? tx.originalAmount : tx.amount;
+                const origCurrency = tx.originalCurrency || oldCurrency;
+                const rate = await getExchangeRate(origCurrency, newCurrency);
+
+                tx.originalAmount = origAmount;
+                tx.originalCurrency = origCurrency;
+                tx.conversionRate = rate;
+                tx.amount = origAmount * rate;
+                tx.baseCurrency = newCurrency;
+                await tx.save();
+            };
+
+            for (const inc of incomes) {
+                await updateTransactionCurrency(inc);
+            }
+            for (const exp of expenses) {
+                await updateTransactionCurrency(exp);
+            }
+        }
+
+        res.json({
+            success:true,
+            message:"Profile updated successfully",
+            user: {
+                id: currentUser._id,
+                name: currentUser.name,
+                email: currentUser.email,
+                preferredCurrency: currentUser.preferredCurrency
+            }
+        });
     }
     catch(err){
         console.error(err);
@@ -171,7 +219,8 @@ export async function googleLogin(req, res) {
             user: {
                 id: user._id,
                 name: user.name,
-                email: user.email
+                email: user.email,
+                preferredCurrency: user.preferredCurrency || 'INR'
             }
         });
     } catch (error) {

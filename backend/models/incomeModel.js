@@ -9,6 +9,18 @@ const incomeSchema = new mongoose.Schema({
     type : Number,
     required : true
   },
+  originalAmount: {
+    type: Number
+  },
+  originalCurrency: {
+    type: String
+  },
+  conversionRate: {
+    type: Number
+  },
+  baseCurrency: {
+    type: String
+  },
   category: {
     type: String,
     required : true,

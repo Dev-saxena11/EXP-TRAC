@@ -54,6 +54,7 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
   const [user, setUser] = useState({
     name: "",
     email: "",
+    preferredCurrency: "INR",
     joinDate: "",
   });
   const [editMode, setEditMode] = useState(false);
@@ -301,6 +302,25 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
                     />
                   </div>
 
+                  <div>
+                    <label className={profileStyles.label}>Preferred Base Currency</label>
+                    <select
+                      name="preferredCurrency"
+                      value={tempUser.preferredCurrency || "INR"}
+                      onChange={handleInputChange}
+                      className={profileStyles.input}
+                      disabled={loading}
+                    >
+                      <option value="INR">INR (₹)</option>
+                      <option value="USD">USD ($)</option>
+                      <option value="EUR">EUR (€)</option>
+                      <option value="GBP">GBP (£)</option>
+                      <option value="JPY">JPY (¥)</option>
+                      <option value="CAD">CAD (CA$)</option>
+                      <option value="AUD">AUD (A$)</option>
+                    </select>
+                  </div>
+
                   <div className="flex gap-3 pt-4">
                     <button
                       onClick={handleSaveProfile}
@@ -327,6 +347,10 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
                   <div>
                     <p className={profileStyles.label}>Email Address</p>
                     <p className="font-medium text-gray-800">{user.email}</p>
+                  </div>
+                  <div>
+                    <p className={profileStyles.label}>Preferred Base Currency</p>
+                    <p className="font-medium text-gray-800">{user.preferredCurrency || "INR"}</p>
                   </div>
                 </div>
               )}

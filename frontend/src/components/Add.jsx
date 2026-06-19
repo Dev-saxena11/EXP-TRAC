@@ -66,6 +66,29 @@ const AddTransactionModal = ({
                         placeholder="0.00" required
                         />
                     </div>
+
+                    <div>
+                        <label className={modalStyles.label}>Currency</label>
+                        <select
+                            value={newTransaction.currency || ""}
+                            onChange={(e) =>
+                                setNewTransaction((prev) => ({
+                                    ...prev,
+                                    currency: e.target.value,
+                                }))
+                            }
+                            className={modalStyles.input(colorClass.ring)}
+                        >
+                            <option value="">Default (Preferred)</option>
+                            <option value="INR">INR (₹)</option>
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="JPY">JPY (¥)</option>
+                            <option value="CAD">CAD (CA$)</option>
+                            <option value="AUD">AUD (A$)</option>
+                        </select>
+                    </div>
                      {type === "both" && (
               <div>
                 <label className={modalStyles.label}>Type</label>
@@ -108,9 +131,9 @@ const AddTransactionModal = ({
                     ))}
                 </select>
             </div>
-            <div>
+             <div>
                 <label className={modalStyles.label}>Date</label>
-                <input type="date" value={newTransaction.date} onChange={(e)=>newTransaction((prev)=>({
+                <input type="date" value={newTransaction.date} onChange={(e)=>setNewTransaction((prev)=>({
                     ...prev,
                     date:e.target.value,
                 }))
