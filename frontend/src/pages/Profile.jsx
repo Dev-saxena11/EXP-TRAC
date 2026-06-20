@@ -1,4 +1,5 @@
 import React, { memo, useCallback, useEffect, useState } from "react";
+import { motion } from 'framer-motion';
 import { profileStyles } from "../assets/dummyStyles.js";
 import Modal from "react-modal";
 import { Eye, EyeOff, Lock, User, X } from "lucide-react";
@@ -231,8 +232,20 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
     }
   }, [loading]);
 
+  const pageVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.3 } }
+  };
+
   return (
-    <div className={profileStyles.container}>
+    <motion.div 
+      className={profileStyles.container}
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -463,7 +476,7 @@ const Profile = ({ onUpdateProfile, onLogout }) => {
         </div>
       </Modal>
        
-    </div>
+    </motion.div>
   );
 };
 

@@ -1,5 +1,176 @@
 @import "tailwindcss";
 
+@theme {
+  --color-surface: var(--surface);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-border: var(--border);
+
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+}
+
+:root {
+  --surface: #ffffff;
+  --background: #f9fafb;
+  --foreground: #1f2937;
+  --border: #f3f4f6;
+  
+  /* Modal overrides */
+  --modal-bg: #ffffff;
+  --modal-overlay: rgba(0, 0, 0, 0.5);
+}
+
+:root.dark {
+  --surface: #1f2937;
+  --background: #111827;
+  --foreground: #f9fafb;
+  --border: #374151;
+  
+  /* Modal overrides */
+  --modal-bg: #1f2937;
+  --modal-overlay: rgba(0, 0, 0, 0.7);
+}
+
+/* Default Teal */
+:root.theme-teal {
+  --primary-50: #f0fdfa;
+  --primary-100: #ccfbf1;
+  --primary-200: #99f6e4;
+  --primary-300: #5eead4;
+  --primary-400: #2dd4bf;
+  --primary-500: #14b8a6;
+  --primary-600: #0d9488;
+  --primary-700: #0f766e;
+  --primary-800: #115e59;
+  --primary-900: #134e4a;
+}
+
+/* Blue Palette */
+:root.theme-blue {
+  --primary-50: #eff6ff;
+  --primary-100: #dbeafe;
+  --primary-200: #bfdbfe;
+  --primary-300: #93c5fd;
+  --primary-400: #60a5fa;
+  --primary-500: #3b82f6;
+  --primary-600: #2563eb;
+  --primary-700: #1d4ed8;
+  --primary-800: #1e40af;
+  --primary-900: #1e3a8a;
+}
+
+/* Purple Palette */
+:root.theme-purple {
+  --primary-50: #faf5ff;
+  --primary-100: #f3e8ff;
+  --primary-200: #e9d5ff;
+  --primary-300: #d8b4fe;
+  --primary-400: #c084fc;
+  --primary-500: #a855f7;
+  --primary-600: #9333ea;
+  --primary-700: #7e22ce;
+  --primary-800: #6b21a8;
+  --primary-900: #581c87;
+}
+
+/* Orange Palette */
+:root.theme-orange {
+  --primary-50: #fff7ed;
+  --primary-100: #ffedd5;
+  --primary-200: #fed7aa;
+  --primary-300: #fdba74;
+  --primary-400: #fb923c;
+  --primary-500: #f97316;
+  --primary-600: #ea580c;
+  --primary-700: #c2410c;
+  --primary-800: #9a3412;
+  --primary-900: #7c2d12;
+}
+
+/* Animated Backgrounds */
+
+/* Big Waves */
+.bg-waves {
+  background: var(--background);
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--primary-100) 25%,
+    transparent 25%,
+    transparent 75%,
+    var(--primary-100) 75%,
+    var(--primary-100)
+  ), repeating-linear-gradient(
+    45deg,
+    var(--primary-100) 25%,
+    var(--background) 25%,
+    var(--background) 75%,
+    var(--primary-100) 75%,
+    var(--primary-100)
+  );
+  background-position: 0 0, 40px 40px;
+  background-size: 80px 80px;
+  animation: moveWaves 10s linear infinite;
+}
+
+.dark .bg-waves {
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--primary-900) 25%,
+    transparent 25%,
+    transparent 75%,
+    var(--primary-900) 75%,
+    var(--primary-900)
+  ), repeating-linear-gradient(
+    45deg,
+    var(--primary-900) 25%,
+    var(--background) 25%,
+    var(--background) 75%,
+    var(--primary-900) 75%,
+    var(--primary-900)
+  );
+}
+
+@keyframes moveWaves {
+  100% {
+    background-position: 80px 80px, 120px 120px;
+  }
+}
+
+/* Fluid Gradient */
+.bg-fluid {
+  background: linear-gradient(-45deg, var(--primary-300), var(--primary-100), var(--primary-400), var(--primary-200));
+  background-size: 400% 400%;
+  animation: fluidGradient 15s ease infinite;
+}
+
+.dark .bg-fluid {
+  background: linear-gradient(-45deg, var(--primary-900), var(--primary-700), var(--primary-800), var(--primary-600));
+  background-size: 400% 400%;
+  animation: fluidGradient 15s ease infinite;
+}
+
+@keyframes fluidGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }

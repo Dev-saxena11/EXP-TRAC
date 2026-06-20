@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
+import { motion } from 'framer-motion';
 import { useOutletContext } from "react-router-dom";
 import {
   Plus,
@@ -494,8 +495,20 @@ const Income = () => {
     }
   }, [getAuthHeaders, filteredTransactions]);
 
+  const pageVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.3 } }
+  };
+
   return (
-    <div className={styles.wrapper}>
+    <motion.div 
+      className={styles.wrapper}
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
       <div className={styles.headerContainer}>
         <div className={styles.header}>
           <div>
@@ -672,7 +685,7 @@ const Income = () => {
         categories={["Salary", "Freelance", "Investment", "Bonus", "Other"]}
         color="teal"
       />
-    </div>
+    </motion.div>
   );
 };
 

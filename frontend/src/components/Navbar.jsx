@@ -2,19 +2,23 @@ import React, { useEffect, useRef, useState } from 'react'
 import { navbarStyles } from '../assets/dummyStyles.js'
 import img1 from "../assets/logo.png"
 import { useNavigate } from 'react-router-dom'
-import { ChevronDown, LogOut, User } from 'lucide-react';
+import { ChevronDown, LogOut, User, Settings } from 'lucide-react';
 import axios from 'axios';
 import { API_URL } from '../config.js';
+import ThemeSettings from './ThemeSettings.jsx';
+
 const BASE_URL = `${API_URL}/api`;
 
 const Navbar = ({ user: propUser, onLogout }) => {
     const navigate = useNavigate();
     const menuRef = useRef();
     const [menuOpen, setMenuOpen] = useState(false);
-    const user = propUser || {
+    const [themeSettingsOpen, setThemeSettingsOpen] = useState(false);
+    const [user, setUser] = useState(propUser || {
         name: "",
         email: "",
-    };
+    });
+    
     //to fetch user from server 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -33,6 +37,7 @@ const Navbar = ({ user: propUser, onLogout }) => {
             }
         }
         if (!propUser) { fetchUserData(); }
+        else { setUser(propUser); }
     }, [propUser]);
 
     const toggleMenu = () => setMenuOpen((prev) => !prev);
@@ -117,6 +122,14 @@ const Navbar = ({ user: propUser, onLogout }) => {
                                         <User className='w-4 h-4' />
                                         <span>My Profile</span>
                                     </button>
+                                    <button onClick={() => {
+                                        setMenuOpen(false);
+                                        setThemeSettingsOpen(true);
+                                    }}
+                                        className={navbarStyles.menuItem}>
+                                        <Settings className='w-4 h-4' />
+                                        <span>Theme Settings</span>
+                                    </button>
                                 </div>
 
                                 <div className={navbarStyles.menuItemBorder}>
@@ -133,6 +146,11 @@ const Navbar = ({ user: propUser, onLogout }) => {
                     </div>
                 )}
             </div>
+            
+            <ThemeSettings 
+                isOpen={themeSettingsOpen} 
+                onClose={() => setThemeSettingsOpen(false)} 
+            />
         </header>
     );
 };

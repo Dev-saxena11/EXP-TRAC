@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { motion } from 'framer-motion';
 import {dashboardStyles,trendStyles,chartStyles} from '../assets/dummyStyles.js'
 import {GAUGE_COLORS,COLORS,INCOME_CATEGORY_ICONS,EXPENSE_CATEGORY_ICONS} from '../assets/color.jsx'
 import {useOutletContext} from "react-router-dom"
@@ -329,12 +330,23 @@ const Dashboard = () => {
         });setShowModal(false);
     } catch (error) {
       console.error("failed to add Transaction: ",error?.response||error.message||error); 
-    }finally{
-      setLoading(false);
     }
-    }
+  }
+
+  const pageVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.3 } }
+  };
+
   return(
-    <div className={dashboardStyles.container}>
+    <motion.div 
+      className={dashboardStyles.container}
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
       {/* Header */}
       <div className={dashboardStyles.headerContainer}>
         <div className={dashboardStyles.headerContent}>
@@ -638,7 +650,7 @@ const Dashboard = () => {
 
       <AddTransactionModal showModal={showModal} setShowModal={setShowModal} newTransaction={newTransaction} setNewTransaction={setNewTransaction} handleAddTransaction={handleAddTransaction}
       loading={loading} />
-    </div>
+    </motion.div>
   )
 }
 

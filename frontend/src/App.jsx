@@ -1,7 +1,9 @@
 import React, {  useEffect, useState } from "react";
 import { Navigate,Route,Routes, useLocation, useNavigate} from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import Layout from "./components/Layout.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import AnimatedBackground from "./components/AnimatedBackground.jsx";
 
 import Login from "./components/Login.jsx";
 import SignUp from "./components/SignUp.jsx";
@@ -189,40 +191,45 @@ const App = () => {
 
 
 
+
+  const location = useLocation();
   return (
     <>
-    <ScrollToTop />
-      <Routes>
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route path="/signup" element={<SignUp onSignup={handleSignup} />} />
-        <Route 
-        element={
-        <ProtectedRoute user={user}>
-          <Layout user={user} onLogout={handleLogout} transactions={transactions} addTransaction={addTransaction} editTransaction={editTransaction} deleteTransaction={deleteTransaction} refreshTransactions={refreshTransactions}/>
-          </ProtectedRoute>}>
+      <AnimatedBackground />
+      <ScrollToTop />
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          <Route path="/signup" element={<SignUp onSignup={handleSignup} />} />
+          <Route 
+          element={
+          <ProtectedRoute user={user}>
+            <Layout user={user} onLogout={handleLogout} transactions={transactions} addTransaction={addTransaction} editTransaction={editTransaction} deleteTransaction={deleteTransaction} refreshTransactions={refreshTransactions}/>
+            </ProtectedRoute>}>
 
-          <Route path="/" element={<Dashboard />} transactions={transactions} addTransaction={addTransaction} editTransaction={editTransaction} deleteTransaction={deleteTransaction} refreshTransactions={refreshTransactions}/>
+            <Route path="/" element={<Dashboard />} transactions={transactions} addTransaction={addTransaction} editTransaction={editTransaction} deleteTransaction={deleteTransaction} refreshTransactions={refreshTransactions}/>
 
-          <Route path="/income" element={
-            <Income   transactions={transactions} addTransaction={addTransaction} editTransaction={editTransaction} deleteTransaction={deleteTransaction} refreshTransactions={refreshTransactions} />
-          } />
+            <Route path="/income" element={
+              <Income   transactions={transactions} addTransaction={addTransaction} editTransaction={editTransaction} deleteTransaction={deleteTransaction} refreshTransactions={refreshTransactions} />
+            } />
 
-          <Route path="/expense" element={
-            <Expense   transactions={transactions} addTransaction={addTransaction} editTransaction={editTransaction} deleteTransaction={deleteTransaction} refreshTransactions={refreshTransactions} />
-          } />
+            <Route path="/expense" element={
+              <Expense   transactions={transactions} addTransaction={addTransaction} editTransaction={editTransaction} deleteTransaction={deleteTransaction} refreshTransactions={refreshTransactions} />
+            } />
 
-          <Route path="/profile" element={
-            <Profile user={user}
-            onUpdateProfile={updateUserData}
-            onLogout={handleLogout} />
-          }
-          />
-        </Route>
+            <Route path="/profile" element={
+              <Profile user={user}
+              onUpdateProfile={updateUserData}
+              onLogout={handleLogout} />
+            }
+            />
+          </Route>
 
-        <Route path="*" element={
-            <Navigate to={user?"/":"/login"} replace />
-          } />
-      </Routes>
+          <Route path="*" element={
+              <Navigate to={user?"/":"/login"} replace />
+            } />
+        </Routes>
+      </AnimatePresence>
     </>
   );
 };

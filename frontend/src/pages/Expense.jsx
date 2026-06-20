@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
+import { motion } from 'framer-motion';
 import { useOutletContext } from "react-router-dom";
 import {
   Plus,
@@ -369,8 +370,20 @@ const ExpensePage = () => {
   };
 
 
+  const pageVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.3 } }
+  };
+
   return (
-    <div className={styles.container}>
+    <motion.div 
+      className={styles.container}
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
       <div className={styles.headerCard}>
         <div className={styles.headerContainer}>
           <div>
@@ -625,7 +638,7 @@ const ExpensePage = () => {
         ]}
         color="orange"
       />
-    </div>
+    </motion.div>
   );
 };
 
