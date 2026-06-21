@@ -324,12 +324,12 @@ const Layout = ({ onLogout, user }) => {
                   {formatCurrency(stats.allTimeSavings, baseCurrency)}
                 </p>
               </div>
-              <div className={styles.statCards.iconContainer('teal')}>
-                <DollarSign className={styles.statCards.icon('teal')} />
+              <div className={styles.statCards.iconContainer('primary')}>
+                <DollarSign className={styles.statCards.icon('primary')} />
               </div>
             </div>
             <p className={styles.statCards.cardFooter}>
-              <span className='text-teal-600 font-medium'>
+              <span className='text-primary-600 font-medium'>
                 {stats.last30DaysSavings >= 0 ? "+" : ""}{formatCurrency(stats.last30DaysSavings, baseCurrency)}
               </span>{" "}
               this month
@@ -406,7 +406,7 @@ const Layout = ({ onLogout, user }) => {
             <div className={styles.cards.base}>
               <div className={styles.cards.header}>
                 <h3 className={styles.cards.title}>
-                  <TrendingUp className='w-6 h-6 text-teal-500' />
+                  <TrendingUp className='w-6 h-6 text-primary-500' />
                   Financial Overview
                   <span className='text-sm text-gray-500 font-normal'>
                     ({timeFrameLabel})

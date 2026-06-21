@@ -633,7 +633,7 @@ export const cn = (...classes) => classes.filter(Boolean).join(" ");
 export const styles = {
   // Layout and Container Styles
   layout: {
-    root: "min-h-screen bg-gradient-to-br from-gray-50 to-gray-100",
+    root: "min-h-screen",
     mainContainer: (sidebarCollapsed) => 
       `p-4 pt-6 transition-all duration-300 ${sidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'}`,
   },

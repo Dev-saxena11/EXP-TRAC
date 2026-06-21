@@ -15,6 +15,7 @@ export const ThemeProvider = ({ children }) => {
     localStorage.setItem('app-background', background);
 
     const root = document.documentElement;
+    const body = document.body;
     
     // Manage dark mode class
     if (theme === 'dark') {
@@ -27,6 +28,14 @@ export const ThemeProvider = ({ children }) => {
     const colors = ['theme-teal', 'theme-blue', 'theme-purple', 'theme-orange'];
     colors.forEach(c => root.classList.remove(c));
     root.classList.add(`theme-${accentColor}`);
+
+    // Apply animated background directly to body (cleanest approach, no z-index issues)
+    body.classList.remove('bg-waves', 'bg-fluid');
+    if (background === 'waves') {
+      body.classList.add('bg-waves');
+    } else if (background === 'fluid') {
+      body.classList.add('bg-fluid');
+    }
 
   }, [theme, accentColor, background]);
 

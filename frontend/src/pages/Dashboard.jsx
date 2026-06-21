@@ -379,7 +379,7 @@ const Dashboard = () => {
         <div className={dashboardStyles.summaryGrid}>
           <FinancialCard icon={
             <div className={dashboardStyles.walletIconContainer}>
-              <Wallet className='w-5 h-5 text-teal-600' />
+              <Wallet className='w-5 h-5 text-primary-600' />
               </div>
             } label="Total Balance" value={formatCurrency(displayIncome-displayExpenses, baseCurrency)}
             additionalContent={
@@ -462,7 +462,7 @@ const Dashboard = () => {
       <div className={dashboardStyles.pieChartContainer}>
         <div className={dashboardStyles.pieChartHeader}>
           <h3 className={dashboardStyles.pieChartTitle}>
-            <PieChartIcon className="w-6 h-6 text-teal-500" />
+            <PieChartIcon className="w-6 h-6 text-primary-500" />
             Expense Distribution
             <span className={dashboardStyles.listSubtitle}> ({timeFrameRange.label})</span>
           </h3>

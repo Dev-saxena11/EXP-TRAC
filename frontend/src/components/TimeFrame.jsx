@@ -8,10 +8,11 @@ const TimeFrameSelector = ({
   style = "default"
 }) => {
   const colorClass = {
-    teal: "bg-teal-500",
+    teal: "bg-primary-500",
+    primary: "bg-primary-500",
     orange: "bg-orange-500",
-    cyan: "bg-cyan-500"
-  }[color];
+    cyan: "bg-primary-500"
+  }[color] || "bg-primary-500";
   
   const styleClass = {
     default: "flex gap-2 bg-white p-1 -mx-11 lg:-mx-0 md:-mx-0 rounded-xl border border-gray-200",

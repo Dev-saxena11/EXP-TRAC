@@ -18,6 +18,20 @@
   --color-primary-900: var(--primary-900);
 }
 
+html, body {
+  background: var(--background);
+  min-height: 100vh;
+  transition: background-color 0.3s ease;
+}
+
+/* When body has animated background class, override with animation */
+body.bg-waves,
+body.bg-fluid {
+  background-size: 300% 300%;
+  transition: none;
+}
+
+
 :root {
   --surface: #ffffff;
   --background: #f9fafb;
@@ -98,76 +112,69 @@
 
 /* Animated Backgrounds */
 
-/* Big Waves */
+/* Animated Backgrounds */
+
+/* Big Waves - using layered gradients that actually move like waves */
 .bg-waves {
-  background: var(--background);
-  background-image: repeating-linear-gradient(
-    45deg,
-    var(--primary-100) 25%,
-    transparent 25%,
-    transparent 75%,
-    var(--primary-100) 75%,
-    var(--primary-100)
-  ), repeating-linear-gradient(
-    45deg,
-    var(--primary-100) 25%,
-    var(--background) 25%,
-    var(--background) 75%,
-    var(--primary-100) 75%,
-    var(--primary-100)
-  );
-  background-position: 0 0, 40px 40px;
-  background-size: 80px 80px;
-  animation: moveWaves 10s linear infinite;
+  background-color: var(--background);
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 20% 30%, var(--primary-200) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 70%, var(--primary-300) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 60% at 50% 50%, var(--primary-100) 0%, transparent 70%);
+  background-size: 300% 300%;
+  animation: bigWaves 12s ease-in-out infinite;
+  opacity: 1;
 }
 
-.dark .bg-waves {
-  background-image: repeating-linear-gradient(
-    45deg,
-    var(--primary-900) 25%,
-    transparent 25%,
-    transparent 75%,
-    var(--primary-900) 75%,
-    var(--primary-900)
-  ), repeating-linear-gradient(
-    45deg,
-    var(--primary-900) 25%,
-    var(--background) 25%,
-    var(--background) 75%,
-    var(--primary-900) 75%,
-    var(--primary-900)
-  );
+:root.dark .bg-waves {
+  background-color: var(--background);
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 20% 30%, var(--primary-900) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 70%, var(--primary-800) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 60% at 50% 50%, var(--primary-700) 0%, transparent 70%);
+  background-size: 300% 300%;
+  animation: bigWaves 12s ease-in-out infinite;
 }
 
-@keyframes moveWaves {
-  100% {
-    background-position: 80px 80px, 120px 120px;
-  }
+@keyframes bigWaves {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 100% 0%; }
+  50% { background-position: 100% 100%; }
+  75% { background-position: 0% 100%; }
+  100% { background-position: 0% 50%; }
 }
 
-/* Fluid Gradient */
+/* Fluid Gradient - bold shifting color blobs */
 .bg-fluid {
-  background: linear-gradient(-45deg, var(--primary-300), var(--primary-100), var(--primary-400), var(--primary-200));
-  background-size: 400% 400%;
-  animation: fluidGradient 15s ease infinite;
+  background: linear-gradient(-45deg, 
+    var(--primary-400), 
+    var(--primary-200), 
+    var(--primary-500), 
+    var(--primary-100),
+    var(--primary-300)
+  );
+  background-size: 500% 500%;
+  animation: fluidGradient 10s ease infinite;
 }
 
-.dark .bg-fluid {
-  background: linear-gradient(-45deg, var(--primary-900), var(--primary-700), var(--primary-800), var(--primary-600));
-  background-size: 400% 400%;
-  animation: fluidGradient 15s ease infinite;
+:root.dark .bg-fluid {
+  background: linear-gradient(-45deg, 
+    var(--primary-900), 
+    var(--primary-700), 
+    var(--primary-800), 
+    var(--primary-600),
+    var(--primary-900)
+  );
+  background-size: 500% 500%;
+  animation: fluidGradient 10s ease infinite;
 }
 
 @keyframes fluidGradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  25% { background-position: 100% 0%; }
+  50% { background-position: 100% 100%; }
+  75% { background-position: 0% 0%; }
+  100% { background-position: 0% 50%; }
 }
 
 
