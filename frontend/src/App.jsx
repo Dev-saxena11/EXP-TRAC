@@ -3,6 +3,7 @@ import { Navigate,Route,Routes, useLocation, useNavigate} from "react-router-dom
 import { AnimatePresence } from "framer-motion";
 import Layout from "./components/Layout.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import Landing from "./pages/Landing.jsx";
 import AnimatedBackground from "./components/AnimatedBackground.jsx";
 
 import Login from "./components/Login.jsx";
@@ -152,12 +153,12 @@ const App = () => {
 
   const handleLogin=(userData , remember=false,tokenFromApi=null)=>{
     persistAuth(userData,tokenFromApi,remember);
-    navigate("/");
+    navigate("/dashboard");
   };
 
   const handleSignup=(userData , remember=false,tokenFromApi=null)=>{
     persistAuth(userData,tokenFromApi,remember);
-    navigate("/");
+    navigate("/dashboard");
   };
 
   const handleLogout=()=>{
@@ -199,6 +200,7 @@ const App = () => {
       <ScrollToTop />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<Landing user={user} onLogout={handleLogout} />} />
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/signup" element={<SignUp onSignup={handleSignup} />} />
           <Route 
@@ -207,7 +209,7 @@ const App = () => {
             <Layout user={user} onLogout={handleLogout} transactions={transactions} addTransaction={addTransaction} editTransaction={editTransaction} deleteTransaction={deleteTransaction} refreshTransactions={refreshTransactions}/>
             </ProtectedRoute>}>
 
-            <Route path="/" element={<Dashboard />} transactions={transactions} addTransaction={addTransaction} editTransaction={editTransaction} deleteTransaction={deleteTransaction} refreshTransactions={refreshTransactions}/>
+            <Route path="/dashboard" element={<Dashboard />} transactions={transactions} addTransaction={addTransaction} editTransaction={editTransaction} deleteTransaction={deleteTransaction} refreshTransactions={refreshTransactions}/>
 
             <Route path="/income" element={
               <Income   transactions={transactions} addTransaction={addTransaction} editTransaction={editTransaction} deleteTransaction={deleteTransaction} refreshTransactions={refreshTransactions} />
@@ -226,7 +228,7 @@ const App = () => {
           </Route>
 
           <Route path="*" element={
-              <Navigate to={user?"/":"/login"} replace />
+              <Navigate to={user?"/dashboard":"/"} replace />
             } />
         </Routes>
       </AnimatePresence>

@@ -65,7 +65,7 @@ const Navbar = ({ user: propUser, onLogout }) => {
         <header className={navbarStyles.header}>
             <div className={navbarStyles.container}>
                 {/* logo */}
-                <div onClick={() => navigate("/")}
+                <div onClick={() => navigate("/dashboard")}
                     className={navbarStyles.logoContainer}>
 
                     <div className={navbarStyles.logoImage}>

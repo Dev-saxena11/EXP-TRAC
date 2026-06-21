@@ -60,7 +60,7 @@ const Login = ({ onLogin }) => {
       if (typeof onLogin === "function") {
         onLogin(profile, rememberMe, token);
       } else {
-        navigate("/");
+        navigate("/dashboard");
       }
     } catch (err) {
       console.error("Google login error:", err);
@@ -112,10 +112,10 @@ const Login = ({ onLogin }) => {
           onLogin(profile, rememberMe, token);
         } catch (callErr) {
           console.warn("onLogin threw:", callErr);
-          navigate("/");
+          navigate("/dashboard");
         }
       } else {
-        navigate("/");
+        navigate("/dashboard");
       }
       setPassword("");
     } catch (err) {
