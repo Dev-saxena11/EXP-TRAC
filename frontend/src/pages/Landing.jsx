@@ -100,10 +100,10 @@ const Landing = ({ user, onLogout }) => {
   return (
     <div className="min-h-screen text-foreground transition-colors duration-300">
       
-      {/* Immersive Background Video Wrapper (Navbar + Hero Fold) */}
-      <div className="relative min-h-screen flex flex-col overflow-hidden">
+      {/* Immersive Background Video Wrapper — always dark, always vivid */}
+      <div className="relative min-h-screen flex flex-col overflow-hidden bg-[#050208]">
         
-        {/* Full-bleed video background */}
+        {/* Full-bleed video background — no opacity reduction, fully vivid */}
         <div className="absolute inset-0 w-full h-full pointer-events-none select-none overflow-hidden z-0">
           <video 
             src="/vid/can_we_have_an_animation_.mp4" 
@@ -112,14 +112,19 @@ const Landing = ({ user, onLogout }) => {
             muted 
             playsInline 
             poster="/vid/Gemini_Generated_Image_5gqytf5gqytf5gqy.png"
-            className="w-full h-full object-cover opacity-60 dark:opacity-40"
+            className="w-full h-full object-cover"
           />
-          {/* Deep dark gradient mask for high text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/65 to-background z-10" />
+          {/* Subtle dark vignette — only at edges for depth, NOT a white wash */}
+          <div className="absolute inset-0 z-10" style={{
+            background: `
+              linear-gradient(to bottom, rgba(5,2,8,0.35) 0%, transparent 30%, transparent 60%, rgba(5,2,8,0.85) 90%, rgba(5,2,8,1) 100%),
+              radial-gradient(ellipse at center, transparent 40%, rgba(5,2,8,0.4) 100%)
+            `
+          }} />
         </div>
 
-        {/* Header/Navbar (relative z-20 to sit on top of mask) */}
-        <nav className="relative z-20 bg-background/20 backdrop-blur-md border-b border-white/5 transition-colors duration-300">
+        {/* Header/Navbar — forced dark glass look */}
+        <nav className="relative z-20 backdrop-blur-md border-b border-white/[0.06] transition-colors duration-300">
           <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
             
             {/* Logo */}
@@ -127,16 +132,16 @@ const Landing = ({ user, onLogout }) => {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-400 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-primary-500/20 group-hover:scale-105 transition-transform duration-200">
                 <span className="font-extrabold text-lg">ET</span>
               </div>
-              <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+              <span className="font-extrabold text-xl tracking-tight text-white">
                 EXP-<span className="bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent">TRAC</span>
               </span>
             </Link>
 
             {/* Desktop Nav Links */}
             <div className="hidden md:flex items-center gap-8 font-medium">
-              <a href="#features" className="text-gray-300 hover:text-foreground transition-colors">Features</a>
-              <a href="#customize" className="text-gray-300 hover:text-foreground transition-colors">Customize</a>
-              <a href="#faq" className="text-gray-300 hover:text-foreground transition-colors">FAQ</a>
+              <a href="#features" className="text-white/60 hover:text-white transition-colors">Features</a>
+              <a href="#customize" className="text-white/60 hover:text-white transition-colors">Customize</a>
+              <a href="#faq" className="text-white/60 hover:text-white transition-colors">FAQ</a>
             </div>
 
             {/* Auth Button CTAs */}
@@ -152,7 +157,7 @@ const Landing = ({ user, onLogout }) => {
                   </button>
                   <button 
                     onClick={onLogout}
-                    className="px-4 py-2.5 rounded-xl font-bold text-gray-300 hover:text-foreground hover:bg-white/5 border border-transparent hover:border-border transition-all cursor-pointer"
+                    className="px-4 py-2.5 rounded-xl font-bold text-white/60 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition-all cursor-pointer"
                   >
                     Logout
                   </button>
@@ -161,7 +166,7 @@ const Landing = ({ user, onLogout }) => {
                 <>
                   <Link 
                     to="/login"
-                    className="px-4 py-2.5 rounded-xl font-bold text-gray-300 hover:text-foreground hover:bg-white/5 transition-all"
+                    className="px-4 py-2.5 rounded-xl font-bold text-white/60 hover:text-white hover:bg-white/5 transition-all"
                   >
                     Sign In
                   </Link>
@@ -178,7 +183,7 @@ const Landing = ({ user, onLogout }) => {
             {/* Mobile Menu Button */}
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-xl text-gray-300 hover:text-foreground hover:bg-white/5 transition-colors"
+              className="md:hidden p-2 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-colors"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -191,30 +196,30 @@ const Landing = ({ user, onLogout }) => {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="md:hidden border-t border-border bg-background transition-colors duration-300 px-6 py-6 space-y-4"
+                className="md:hidden border-t border-white/[0.06] bg-[#050208]/90 backdrop-blur-xl px-6 py-6 space-y-4"
               >
                 <a 
                   href="#features" 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block text-lg font-medium text-gray-500 hover:text-foreground"
+                  className="block text-lg font-medium text-white/60 hover:text-white"
                 >
                   Features
                 </a>
                 <a 
                   href="#customize" 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block text-lg font-medium text-gray-500 hover:text-foreground"
+                  className="block text-lg font-medium text-white/60 hover:text-white"
                 >
                   Customize
                 </a>
                 <a 
                   href="#faq" 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block text-lg font-medium text-gray-500 hover:text-foreground"
+                  className="block text-lg font-medium text-white/60 hover:text-white"
                 >
                   FAQ
                 </a>
-                <div className="pt-4 border-t border-border flex flex-col gap-3">
+                <div className="pt-4 border-t border-white/[0.06] flex flex-col gap-3">
                   {user ? (
                     <>
                       <button 
@@ -225,7 +230,7 @@ const Landing = ({ user, onLogout }) => {
                       </button>
                       <button 
                         onClick={() => { setMobileMenuOpen(false); onLogout(); }}
-                        className="w-full py-3 rounded-xl font-bold border border-border text-center"
+                        className="w-full py-3 rounded-xl font-bold border border-white/10 text-white text-center"
                       >
                         Logout
                       </button>
@@ -235,7 +240,7 @@ const Landing = ({ user, onLogout }) => {
                       <Link 
                         to="/login"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="w-full py-3 rounded-xl font-bold border border-border text-center"
+                        className="w-full py-3 rounded-xl font-bold border border-white/10 text-white text-center"
                       >
                         Sign In
                       </Link>
@@ -254,22 +259,22 @@ const Landing = ({ user, onLogout }) => {
           </AnimatePresence>
         </nav>
 
-        {/* Hero Content Section (relative z-20 to sit on top of mask) */}
+        {/* Hero Content — hardcoded white text, floats over vivid video */}
         <header className="relative z-20 max-w-5xl mx-auto px-6 flex-1 flex flex-col items-center justify-center text-center py-20 md:py-28 space-y-10">
           
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md shadow-sm">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-white/10 bg-white/[0.06] backdrop-blur-md">
             <Sparkles className="w-4 h-4 text-primary-400 animate-pulse" />
-            <span className="text-xs font-semibold text-gray-300 tracking-wide uppercase">Upgrade your wealth engine</span>
+            <span className="text-xs font-semibold text-white/70 tracking-wide uppercase">Upgrade your wealth engine</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08] text-foreground max-w-4xl">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08] text-white max-w-4xl">
             Take Control of Your Wealth With{" "}
             <span className={`bg-gradient-to-r ${getThemeGradient()} bg-clip-text text-transparent`}>
               Infinite Clarity
             </span>
           </h1>
 
-          <p className="text-lg md:text-xl text-gray-300 max-w-2xl leading-relaxed">
+          <p className="text-lg md:text-xl text-white/65 max-w-2xl leading-relaxed">
             A premium personal expense analytics dashboard engineered to trace your financials with modern styling, fluid animated backgrounds, and full interactive control.
           </p>
 
@@ -292,7 +297,7 @@ const Landing = ({ user, onLogout }) => {
                 </Link>
                 <Link 
                   to="/login"
-                  className="w-full sm:w-auto px-8 py-4 rounded-xl font-extrabold text-lg border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:border-white/20 transition-all text-center text-white"
+                  className="w-full sm:w-auto px-8 py-4 rounded-xl font-extrabold text-lg border border-white/15 bg-white/[0.06] backdrop-blur-sm hover:bg-white/10 hover:border-white/25 transition-all text-center text-white"
                 >
                   Live Demo
                 </Link>
@@ -301,18 +306,18 @@ const Landing = ({ user, onLogout }) => {
           </div>
 
           {/* Quick Metrics */}
-          <div className="grid grid-cols-3 gap-6 md:gap-12 pt-10 border-t border-white/5 max-w-lg w-full">
+          <div className="grid grid-cols-3 gap-6 md:gap-12 pt-10 border-t border-white/[0.06] max-w-lg w-full">
             <div>
-              <p className="text-2xl md:text-3xl font-extrabold text-foreground">10k+</p>
-              <p className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-wider mt-1">Active Users</p>
+              <p className="text-2xl md:text-3xl font-extrabold text-white">10k+</p>
+              <p className="text-[10px] md:text-xs font-bold text-white/40 uppercase tracking-wider mt-1">Active Users</p>
             </div>
             <div>
-              <p className="text-2xl md:text-3xl font-extrabold text-foreground">$4.8M+</p>
-              <p className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-wider mt-1">Tracked</p>
+              <p className="text-2xl md:text-3xl font-extrabold text-white">$4.8M+</p>
+              <p className="text-[10px] md:text-xs font-bold text-white/40 uppercase tracking-wider mt-1">Tracked</p>
             </div>
             <div>
-              <p className="text-2xl md:text-3xl font-extrabold text-foreground">99.9%</p>
-              <p className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-wider mt-1">Uptime</p>
+              <p className="text-2xl md:text-3xl font-extrabold text-white">99.9%</p>
+              <p className="text-[10px] md:text-xs font-bold text-white/40 uppercase tracking-wider mt-1">Uptime</p>
             </div>
           </div>
 
