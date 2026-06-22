@@ -8,7 +8,7 @@ import { Menu } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 
 const MENU_ITEMS = [
-  { text: "Dashboard", path: "/", icon: <Home size={20} /> },
+  { text: "Dashboard", path: "/dashboard", icon: <Home size={20} /> },
   { text: "Income", path: "/income", icon: <ArrowUp size={20} /> },
   { text: "Expenses", path: "/expense", icon: <ArrowDown size={20} /> },
   { text: "Profile", path: "/profile", icon: <User size={20} /> },
@@ -121,9 +121,9 @@ const Sidebar = ({user,isCollapsed,setIsCollapsed}) => {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -10 }}
                 >
-                  <h2 className="text-sm font-bold text-gray-800 truncate">{username}
+                  <h2 className="text-sm font-bold text-gray-800 dark:text-gray-200 truncate">{username}
                   </h2>
-                  <p className='text-xs text-gray-500 truncate'>
+                  <p className='text-xs text-gray-500 dark:text-gray-400 truncate'>
                     {email}
                   </p>
                 </motion.div>)}
@@ -204,16 +204,16 @@ const Sidebar = ({user,isCollapsed,setIsCollapsed}) => {
                       {initial}
                     </div>
                     <div>
-                      <h2 className='text-lg font-bold text-gray-800'>
+                      <h2 className='text-lg font-bold text-gray-800 dark:text-gray-200'>
                         {username}
                       </h2>
-                      <p className='text-sm text-gray-500'>
+                      <p className='text-sm text-gray-500 dark:text-gray-400'>
                         {email}
                       </p>
                     </div>
                   </div>
                   <button onClick={() => setMobileOpen(false)} className={sidebarStyles.mobileCloseButton}>
-                    <X size={24} className='text-gray-600' />
+                    <X size={24} className='text-gray-600 dark:text-gray-400' />
                     </button>
                 </div>
                 <div className='flex-1 overflow-y-auto py-4 '>

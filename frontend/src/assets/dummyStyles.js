@@ -15,12 +15,12 @@ export const dashboardStyles = {
   
   // Time frame selector styles
   timeFrameContainer: "flex justify-end mt-4",
-  timeFrameWrapper: "flex gap-0 bg-surface p-1 -mx-5 rounded-xl border border-gray-200",
+  timeFrameWrapper: "flex gap-0 bg-surface p-1 -mx-5 rounded-xl border border-gray-200 dark:border-white/5",
   timeFrameButton: (isActive) => 
     `px-2.5 py-2 text-sm rounded-lg transition-all ${
       isActive 
         ? "bg-primary-500 text-white" 
-        : "text-gray-600 hover:bg-gray-100"
+        : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-white/5"
     }`,
   
   // Summary cards grid
@@ -42,11 +42,12 @@ export const dashboardStyles = {
   
   // Pie chart tooltip styles
   tooltipContent: {
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
-    border: "1px solid #e5e7eb",
+    backgroundColor: "var(--surface)",
+    border: "1px solid var(--border)",
     borderRadius: "0.75rem",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.3)",
     padding: "12px",
+    color: "var(--foreground)"
   },
   tooltipItem: { fontWeight: 400 },
   
@@ -58,7 +59,7 @@ export const dashboardStyles = {
   listsGrid: "grid grid-cols-1 gap-6",
   
   // List container styles
-  listContainer: "bg-surface rounded-2xl lg:p-5 md:p-6 -mx-8 md:-mx-3 shadow-sm border border-gray-100",
+  listContainer: "bg-surface rounded-2xl lg:p-5 md:p-6 -mx-8 md:-mx-3 shadow-sm border border-gray-100 dark:border-white/5",
   listHeader: "flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 gap-3",
   listTitle: "text-xl font-bold text-foreground md:mt-3 mt-3 flex items-center gap-3",
   listSubtitle: "text-sm text-gray-500 font-normal",
@@ -91,8 +92,8 @@ export const dashboardStyles = {
   emptyText: "text-gray-600 font-medium",
   
   // View all button styles
-  viewAllContainer: "pt-4 border-t border-gray-100",
-  viewAllButton: "w-full flex items-center justify-center gap-2 py-3 text-primary-600 font-medium hover:bg-teal-50 rounded-xl transition-colors",
+  viewAllContainer: "pt-4 border-t border-gray-100 dark:border-white/5",
+  viewAllButton: "w-full flex items-center justify-center gap-2 py-3 text-primary-600 font-medium hover:bg-teal-50 dark:hover:bg-primary-500/10 rounded-xl transition-colors",
   
   // Icon container styles
   iconContainer: (color) => `p-2 ${color} rounded-lg`,
@@ -130,21 +131,21 @@ export const incomeStyles = {
   summaryGrid: "grid grid-cols-1 -mx-4 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5",
   
   // Chart
-  chartContainer: "hidden md:block -mx-7 bg-surface rounded-xl p-6 shadow-sm border border-gray-100",
+  chartContainer: "hidden md:block -mx-7 bg-surface rounded-xl p-6 shadow-sm border border-gray-100 dark:border-white/5",
   chartTitle: "text-lg md:text-xl font-bold text-foreground mb-4 md:mb-5 flex items-center gap-2 md:gap-3",
   
   // Transaction List
-  listContainer: "bg-surface rounded-xl -mx-7 md:rounded-2xl p-4 md:p-6 shadow-sm border border-gray-100 relative overflow-hidden",
+  listContainer: "bg-surface rounded-xl -mx-7 md:rounded-2xl p-4 md:p-6 shadow-sm border border-gray-100 dark:border-white/5 relative overflow-hidden",
   sectionTitle: "text-lg md:text-xl font-bold text-foreground mb-4 md:mb-5 flex items-center gap-2 md:gap-3",
   
   // Filter Section
   filterContainer: "flex flex-col sm:flex-row gap-2 md:gap-3 w-full sm:w-auto",
-  filterSelect: "appearance-none bg-surface border border-gray-300 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent w-full",
-  exportButton: "flex items-center justify-center gap-1 bg-surface border border-gray-300 hover:bg-background text-gray-700 px-3 py-2 rounded-lg transition-all text-sm hover:shadow-md w-full sm:w-auto",
+  filterSelect: "appearance-none bg-surface border border-gray-300 dark:border-white/10 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent w-full",
+  exportButton: "flex items-center justify-center gap-1 bg-surface border border-gray-300 dark:border-white/10 hover:bg-background text-gray-700 px-3 py-2 rounded-lg transition-all text-sm hover:shadow-md w-full sm:w-auto",
   
   // Transaction Items
   transactionList: "space-y-3 -mx-3 lg:-mx-0 md:-mx-0",
-  viewAllButton: "mt-4 w-full text-center py-3 text-green-600 font-medium hover:bg-green-50 rounded-xl transition-colors flex items-center justify-center gap-2",
+  viewAllButton: "mt-4 w-full text-center py-3 text-green-600 font-medium hover:bg-green-50 dark:hover:bg-emerald-500/10 rounded-xl transition-colors flex items-center justify-center gap-2",
   
   // Empty State
   emptyStateContainer: "text-center py-6 md:py-8",
@@ -164,11 +165,12 @@ export const incomeStyles = {
   
   // Chart tooltip styles 
   tooltipContent: {
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
-    border: "1px solid #e5e7eb",
+    backgroundColor: "var(--surface)",
+    border: "1px solid var(--border)",
     borderRadius: "0.75rem",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.3)",
     padding: "12px",
+    color: "var(--foreground)",
     backdropFilter: "blur(4px)",
   },
   
@@ -206,21 +208,21 @@ export const expensePageStyles = {
   cardsGrid: "grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-5",
   
   // Chart container
-  chartContainer: "hidden md:block bg-surface rounded-xl p-4 -mx-7 lg:-mx-0 shadow-sm border border-gray-100",
+  chartContainer: "hidden md:block bg-surface rounded-xl p-4 -mx-7 lg:-mx-0 shadow-sm border border-gray-100 dark:border-white/5",
   chartHeader: "flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5",
   chartTitle: "text-xl font-bold text-foreground mb-5 flex items-center gap-3",
-  exportButton: "flex items-center gap-1 bg-surface border border-gray-300 hover:bg-background text-gray-700 px-4 py-2 rounded-lg transition-all text-sm hover:shadow-md",
+  exportButton: "flex items-center gap-1 bg-surface border border-gray-300 dark:border-white/10 hover:bg-background text-gray-700 px-4 py-2 rounded-lg transition-all text-sm hover:shadow-md",
   chart: "h-80",
   
   // Transactions container
-  transactionsContainer: "bg-surface rounded-2xl p-5 -mx-4 lg:-mx-0 md:-mx-5 shadow-sm border border-gray-100 relative overflow-hidden",
+  transactionsContainer: "bg-surface rounded-2xl p-5 -mx-4 lg:-mx-0 md:-mx-5 shadow-sm border border-gray-100 dark:border-white/5 relative overflow-hidden",
   transactionsHeader: "flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 md:gap-4 mb-4 md:mb-5",
   transactionsTitle: "text-lg md:text-xl font-bold text-foreground mb-4 md:mb-5 flex items-center gap-2 md:gap-3",
-  filterSelect: "appearance-none bg-surface border border-gray-300 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent w-full",
+  filterSelect: "appearance-none bg-surface border border-gray-300 dark:border-white/10 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent w-full",
   
   // Transaction items
   transactionsList: "space-y-3 -mx-2 lg:-mx-0 md:-mx-0",
-  viewAllButton: "mt-4 w-full text-center py-3 text-orange-600 font-medium hover:bg-amber-50 rounded-xl transition-colors flex items-center justify-center gap-2",
+  viewAllButton: "mt-4 w-full text-center py-3 text-orange-600 font-medium hover:bg-amber-50 dark:hover:bg-orange-500/10 rounded-xl transition-colors flex items-center justify-center gap-2",
   emptyState: "text-center py-8",
   emptyStateIcon: "w-16 h-16 mx-auto mb-4 rounded-full bg-orange-50 flex items-center justify-center",
   emptyStateText: "text-gray-600 font-medium",
@@ -240,11 +242,12 @@ export const expensePageStyles = {
   borderYellow: "border-l-4 border-yellow-500",
   // Chart tooltip styles 
   tooltipContent: {
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
-    border: "1px solid #e5e7eb",
+    backgroundColor: "var(--surface)",
+    border: "1px solid var(--border)",
     borderRadius: "0.75rem",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.3)",
     padding: "12px",
+    color: "var(--foreground)",
     backdropFilter: "blur(4px)",
   },
   
@@ -563,8 +566,8 @@ export const sidebarStyles = {
   
   menuItem: {
     base: "relative flex items-center gap-3 py-3 rounded-xl font-medium transition-all duration-200",
-    active: "text-primary-600 bg-teal-50",
-    inactive: "text-gray-600 hover:text-primary-700 hover:bg-background",
+    active: "text-primary-600 bg-primary-500/10 dark:bg-primary-500/10",
+    inactive: "text-gray-600 hover:text-primary-700 hover:bg-background dark:hover:bg-white/5",
     collapsed: "justify-center px-0 mx-2",
     expanded: "px-4"
   },
@@ -578,12 +581,12 @@ export const sidebarStyles = {
   
   // Toggle button
   toggleButton: {
-    base: "absolute -right-3 top-12 z-20 w-6 h-6 bg-surface border border-gray-300 rounded-full flex items-center justify-center text-gray-500 hover:text-primary-600 hover:border-teal-400 hover:bg-teal-50 transition-all"
+    base: "absolute -right-3 top-12 z-20 w-6 h-6 bg-surface border border-gray-300 dark:border-white/10 rounded-full flex items-center justify-center text-gray-500 hover:text-primary-600 hover:border-teal-400 hover:bg-primary-500/10 transition-all"
   },
   
   // Footer section
   footerContainer: {
-    base: "border-t border-gray-100 p-4",
+    base: "border-t border-gray-100 dark:border-white/5 p-4",
     collapsed: "px-3",
     expanded: "px-6"
   },
@@ -613,8 +616,8 @@ export const sidebarStyles = {
   mobileMenuList: "space-y-1",
   mobileMenuItem: {
     base: "flex items-center gap-4 px-6 py-4 font-medium",
-    active: "text-primary-600 bg-teal-50",
-    inactive: "text-gray-600 hover:bg-background"
+    active: "text-primary-600 bg-primary-500/10 dark:bg-primary-500/10",
+    inactive: "text-gray-600 hover:bg-background dark:hover:bg-white/5"
   },
   
   mobileFooter: "border-t border-gray-100 p-6",
@@ -648,7 +651,7 @@ export const styles = {
   // Stat Card Styles
   statCards: {
     grid: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-6",
-    card: "bg-surface p-5 rounded-2xl shadow-sm border border-gray-100",
+    card: "bg-surface p-5 rounded-2xl shadow-sm border border-gray-100 dark:border-white/5",
     cardHeader: "flex justify-between items-start",
     cardTitle: "text-sm text-gray-600",
     cardValue: "text-2xl font-bold text-foreground mt-1",
@@ -666,7 +669,7 @@ export const styles = {
 
   // Card Styles
   cards: {
-    base: "bg-surface rounded-2xl p-6 shadow-sm border border-gray-100",
+    base: "bg-surface rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-white/5",
     header: "flex justify-between items-center mb-6",
     title: "text-xl font-bold text-foreground flex items-center gap-3",
     titleIcon: "w-6 h-6",
@@ -676,12 +679,12 @@ export const styles = {
   transactions: {
     cardHeader: "flex justify-between items-center mb-4",
     cardTitle: "text-md md:text-xl lg:text-xl xl:text-xl font-bold text-foreground flex items-center gap-3",
-    refreshButton: "p-2 rounded-lg hover:bg-gray-100 transition-colors",
+    refreshButton: "p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 transition-colors",
     refreshIcon: (loading) => `w-5 h-5 text-gray-500 ${loading ? 'animate-spin' : ''}`,
-    dataStackingInfo: "flex items-center gap-2 text-xs text-gray-500 mb-4 bg-blue-50 p-2 rounded-lg",
+    dataStackingInfo: "flex items-center gap-2 text-xs text-gray-500 mb-4 bg-blue-50 dark:bg-blue-500/5 dark:text-blue-400 dark:border-blue-500/10 border border-transparent p-2 rounded-lg",
     dataStackingIcon: "w-4 h-4 text-blue-500",
     listContainer: "space-y-4 max-h-[500px] -mx-5 overflow-y-auto pr-2",
-    transactionItem: "flex items-center lg:flex-col xl:flex-row md:flex-row justify-between p-1 -mx-0 lg:p-4 md:p-4 hover:bg-background rounded-xl transition-all duration-300 border border-gray-100",
+    transactionItem: "flex items-center lg:flex-col xl:flex-row md:flex-row justify-between p-1 -mx-0 lg:p-4 md:p-4 hover:bg-background rounded-xl transition-all duration-300 border border-gray-100 dark:border-white/5",
     iconWrapper: (type) => type === 'income' ? 'bg-primary-100 text-primary-600' : 'bg-orange-100 text-orange-600',
     icon: "w-4 h-4",
     details: "min-w-0",
@@ -692,8 +695,8 @@ export const styles = {
     emptyIconContainer: "w-16 h-16 mx-auto mb-4 rounded-full bg-purple-100 flex items-center justify-center",
     emptyIcon: "w-8 h-8 text-purple-500",
     emptyText: "text-gray-600 font-medium",
-    viewAllContainer: "pt-4 border-t border-gray-100",
-    viewAllButton: "w-full flex items-center justify-center gap-2 py-3 text-primary-600 font-medium hover:bg-teal-50 rounded-xl transition-colors",
+    viewAllContainer: "pt-4 border-t border-gray-100 dark:border-white/5",
+    viewAllButton: "w-full flex items-center justify-center gap-2 py-3 text-primary-600 font-medium hover:bg-teal-50 dark:hover:bg-primary-500/10 rounded-xl transition-colors",
   },
 
   // Spending by Category Card
@@ -702,14 +705,14 @@ export const styles = {
     titleIcon: "w-6 h-6 text-primary-500",
     list: "space-y-4",
     categoryItem: "flex items-center md:text-lg lg:text-sm xl:text-lg justify-between",
-    categoryIconContainer: "bg-gray-100 p-2 rounded-lg",
+    categoryIconContainer: "bg-gray-100 dark:bg-white/5 p-2 rounded-lg",
     categoryIcon: "w-4 h-4 text-gray-600",
     categoryName: "font-medium text-gray-700",
     categoryAmount: "font-semibold text-foreground",
-    summaryContainer: "mt-6 pt-6 border-t border-gray-100",
+    summaryContainer: "mt-6 pt-6 border-t border-gray-100 dark:border-white/5",
     summaryGrid: "grid grid-cols-2 gap-4",
-    summaryIncomeCard: "bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl p-4",
-    summaryExpenseCard: "bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-4",
+    summaryIncomeCard: "bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-500/5 dark:to-cyan-500/5 rounded-xl p-4 border border-transparent dark:border-white/5",
+    summaryExpenseCard: "bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-500/5 dark:to-amber-500/5 rounded-xl p-4 border border-transparent dark:border-white/5",
     summaryTitle: "text-sm text-gray-600",
     summaryValue: "text-sm font-bold text-foreground",
   },

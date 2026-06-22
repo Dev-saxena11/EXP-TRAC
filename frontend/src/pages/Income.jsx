@@ -89,7 +89,7 @@ const IncomeChart = ({ chartData, timeFrame, timeFrameRange, baseCurrency = "INR
           </defs>
           <CartesianGrid
             strokeDasharray="3 3"
-            stroke="#f3f4f6"
+            stroke="var(--border)"
             vertical={false}
           />
           <XAxis

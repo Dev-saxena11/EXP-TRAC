@@ -58,7 +58,7 @@ const SignUp = ({ onSignup }) => {
       if (typeof onSignup === "function") {
         onSignup(profile, rememberMe, token);
       } else {
-        navigate("/");
+        navigate("/dashboard");
       }
     } catch (err) {
       console.error("Google signup error:", err);
@@ -129,10 +129,10 @@ const SignUp = ({ onSignup }) => {
           onSignup(profile, rememberMe, token);
         } catch (callErr) {
           console.warn("onSignup threw:", callErr);
-          navigate("/");
+          navigate("/dashboard");
         }
       } else {
-        navigate("/");
+        navigate("/dashboard");
       }
       setPassword("");
     } catch (err) {
